@@ -196,7 +196,12 @@ def analyze(file: UploadFile = File(...)):
     try:
         new, scores = score_clip(tmp.name)
     except Exception:
-        raise HTTPException(status_code=422, detail="This video couldn't be read. Try an MP4.")
+        import traceback
+        traceback.print_exc()
+        raise HTTPException(
+            status_code=422,
+            detail="Video analysis failed. Check the server logs."
+        )
     finally:
         os.unlink(tmp.name)
     if not scores:
